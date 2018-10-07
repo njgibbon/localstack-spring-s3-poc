@@ -1,1 +1,1 @@
-Hello Spring! Through AWS SDK, through Localstack, through S3.  
+Hello! Through Java AWS SDK, through Spring, through LocalStack, through S3.  
