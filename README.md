@@ -1,4 +1,5 @@
-# docker-alpine-compare
+# localstack-spring-s3-poc
+
 A quick and dirty demo project which shows how one can easily use LocalStack to perform s3 operations through a Spring app using the Java Amazon SDK.
 
 **Dependencies**: AWS CLI, Docker, Maven, Java 8
