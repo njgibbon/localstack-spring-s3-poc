@@ -1,13 +1,69 @@
-# docker-alpine-compare
+# localstack-spring-s3-poc
 A quick and dirty demo project which shows how one can easily use LocalStack to perform s3 operations through a Spring app using the Java Amazon SDK.
 
 **Dependencies**: AWS CLI, Docker, Maven, Java 8
 
+**Set Up LocalStack**:
+clone LocalStack from https://github.com/localstack/localstack
+
+cd into the LocalStack foilder and run it
+```
+docker-compose up
+```
+forward ports for services you wish to use - in our case 4752 for s3
+
+with Oracle Virtual Box go to the machine 'default'>'Settings...'>'Network'>'Advanced'>'Port Forwarding'
+
+set a rule 's3' to forward 4572 to 4572 on your machine
+
+![image comparison table](/images/port-forwarding.png)
+
+check s3 is running by using a browser
+```
+http://localhost:4572/
+```
+
+**Set Up AWS Components**:
+
+**Configure**:
+for LocalStack you do require AWS details configured but it then ignores them.
+with the AWS CLI:
+```
+aws configure
+12345
+12345
+eu-west-1
+text
+```
+
+**Setup buckets for demo**:
+create buckets
+```
+aws --endpoint-url=http://localhost:4572 s3 mb s3://bucket1
+aws --endpoint-url=http://localhost:4572 s3 mb s3://bucket2
+```
+
+add content to a bucket
+cd into the '/files' folder of this repo
+```
+ aws --endpoint-url=http://localhost:4572 s3 cp hello.txt s3://bucket1
+```
+
+check the change of state in the browser
+```
+http://localhost:4572/
+```
+![image s3 state](/images/localstack-s3-buckets-state.png)
+
+```
+http://localhost:4572/bucket1
+```
+![image bucket1 state](/images/localstack-s3-bucket1-state.png)
 
 
 
 **Build Maven Project**:
-cd into folder where pom.xml is
+cd into this repo where pom.xml is
 ```
 mvn clean install 
 ```
@@ -17,60 +73,44 @@ mvn package
 ```
 
 **Run Spring Boot App**:
-cd into folder where pom.xml is
+cd into this repo where pom.xml is
 ```
 mvn spring-boot:run
+```
+check in the browser
+```
 localhost:8080/
 ```
 
-**List Docker Images**:
-```
-docker images
-```
+**Run the Demo**
 
-**List Docker Containers**:
+**list buckets**:
 ```
-docker ps
+http://localhost:8080/listBuckets
 ```
+![image list buckets](/images/list-buckets.png)
 
-**Build Docker Image**:
-cd into folder where dockerfile is
+**list the contents of a bucket**:
 ```
-docker -t build imagename .
+http://localhost:8080/listObjects/?bucketName=bucket1
 ```
+![image list objects](/images/list-objects.png)
 
-**Run Docker Container**:
-forward ports 8080:8080 on VM Client
+**output the text of an object in a bucket**:
 ```
-docker run -p 8080:8080 imagename
-localhost:8080/
+http://localhost:8080/readObject?bucketName=bucket1&objectName=hello.txt
 ```
-
-**Examples**: 
-
-**Build Alpine Image**:
-cd into folder 'alpine' where dockerfile is
-```
-docker -t build alpine .
-```
-
-**Build Alpine OpenJDK8 Spring hello-world Image**:
-cd into folder 'alpine-openjdk8-spring' where dockerfile and pom.xml is
-```
-mvn clean install 
-docker -t build alpineopenjdk8spring .
-```
-
-
-![image comparison table](/images/image-compare-table.png)
-
-
-
-![image comparison terminal](/images/image-compare-terminal.png)
-
+![image read object](/images/read-object.png)
 
 
 **More Useful Docker Commands**:
+
+**Start up commands**:
+```
+docker-machine start
+eval "$(docker-machine env default)"
+docker-machine env
+```
 
 **Start Container**:
 ```
@@ -91,6 +131,28 @@ docker stop $(docker ps -aq)
 ```
 docker system prune -a
 ```
+
+
+**Resources**
+
+**docker get started**:
+https://docs.docker.com/machine/get-started/
+
+**aws cli**:
+https://aws.amazon.com/cli/
+
+**aws java sdk s3 examples**:
+https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3.html
+
+**aws java sdk s3 buckets**:
+https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3-buckets.html
+
+**aws java sdk s3 objects**:
+https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3-objects.html
+
+
+
+
 
 
 
