@@ -1,9 +1,11 @@
 # localstack-spring-s3-poc
 A quick and dirty demo on using LocalStack to perform AWS S3 operations through a Java Spring App using the Amazon SDK.
 
+You are able to perform CRUD operations through the Amazon SDK but for simplicity I just went for a series or reads.
+
 **Dependencies**: AWS CLI, Docker, Maven, Java 8
 
-**Set Up LocalStack**:
+**Set Up LocalStack**
 
 clone LocalStack from https://github.com/localstack/localstack
 
@@ -24,9 +26,10 @@ check s3 is running by using a browser
 http://localhost:4572/
 ```
 
-**Set Up AWS Components**:
+**Set Up AWS Components**
 
 **Configure**:
+
 for LocalStack you do require AWS details configured but it then ignores them.
 with the AWS CLI:
 ```
@@ -38,6 +41,7 @@ text
 ```
 
 **Setup buckets for demo**:
+
 create buckets
 ```
 aws --endpoint-url=http://localhost:4572 s3 mb s3://bucket1
